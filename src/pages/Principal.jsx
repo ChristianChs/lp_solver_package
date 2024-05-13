@@ -1,16 +1,14 @@
-import React from 'react'
+import { LpList } from '../components/LpList'
 
 const Principal = () => {
   return (
-    <div className='mx-auto max-w-5xl grid items-center justify-center min-h-screen'>
-        <div>
-            <h1>Investigación Operativa</h1>
-            <div>
-                <a href="">Método Gráfico</a>
-                <a href="">Método Simplex</a>
-            </div>
-        </div>
-    </div>
+
+    <section className='pt-8'>
+      <h1 className='text-io-100'>Programación Lineal </h1>
+      <LpList />
+
+    </section>
+
   )
 }
 
