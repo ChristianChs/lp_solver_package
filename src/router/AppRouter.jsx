@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
-import Principal from "../pages/Principal"
 import { Layout, Navbar } from "../components"
+import {GraphicMethod,Principal, SimplexMethod} from "../pages"
 
 const AppRouter = () => {
     return (
@@ -10,7 +10,8 @@ const AppRouter = () => {
                 <Routes>
                     <Route path="/" element={<Navigate to="/home" />} />
                     <Route path="home" element={<Principal />} />
-
+                    <Route path="graphic-method" element={<GraphicMethod />} />
+                    <Route path="simplex-method" element={<SimplexMethod />} />
                 </Routes>
             </Layout>
         </>

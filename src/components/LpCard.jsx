@@ -12,7 +12,7 @@ export const LpCard = ({
         <div className='rounded-xl shadow-lg bg-[#253745] my-4'>
             <div className='flex flex-col'>
                 <div className='rounded-xl overflow-hidden'>
-                    <img src="https://uxpro.cc/media/publicationimage/header_abef88771a.jpg" alt={id} />
+                    <img src="https://onlinezebra.com/wp-content/uploads/2024/04/Tamano-Imagenes-Instagram-ADS-1080x600.jpg" alt={id} />
                 </div>
                 <div className='px-5 pb-3 h-32'>
                     <h4 className='mt-3 text-slate-50'>{title}</h4>

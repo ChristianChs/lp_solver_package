@@ -1,6 +1,6 @@
-import { LpList } from '../components/LpList'
+import { LpList } from '../components'
 
-const Principal = () => {
+export const Principal = () => {
   return (
 
     <section className='pt-8'>
@@ -11,5 +11,3 @@ const Principal = () => {
 
   )
 }
-
-export default Principal
