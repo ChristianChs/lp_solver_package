@@ -1,10 +1,9 @@
-
 export const Select = ({ id, options, value, onChange }) => {
     return (
         <div className="inline px-2">
             <select
                 id={id}
-                className="px-4 py-2 border rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:border-blue-500"
+                className="px-4 py-2 border rounded-md bg-gray-900 text-white shadow-sm"
                 value={value}
                 onChange={onChange}
             >

@@ -203,14 +203,14 @@ export class jsx_matriz {
     toString() {
        var entra = this.quienEntra();
        var sale = this.quienSale();
-       var res = "<table class=\"jsx_matriz\">";
-       res += "<tr class=\"jsx_matriz_1\"><td>&nbsp;</td><td>&nbsp;</td>";
+       var res = "<table class=\"jsx_matriz w-2/3 table-fixed\">";
+       res += "<tr className=\"jsx_matriz_1 text-center\"><td className=\"px-3 py-2 w- text-sm font-semibold border border-black\">&nbsp;</td><td className=\"px-3 py-2 text-sm font-semibold tracking-wide border border-black\">&nbsp;</td>";
        for (var i = 0; i < this.variables; i++) {
           if (i < this.numvariablesconh || this.v_costes[i] != 0) {
-             res += "<td>" + this.v_costes[i].toString() + "</td>";
+             res += "<td className=\"px-3 py-2 text-sm font-semibold border border-black\">" + this.v_costes[i].toString() + "</td>";
           }
        }
-       res += "<td>&nbsp;</td></tr>";
+       res += "<td className=\"px-3 py-2 text-sm font-semibold border border-black\" >&nbsp;</td></tr>";
        for (var i = 0; i < this.restricciones; i++) {
           var letra;
           var numero;
@@ -227,29 +227,29 @@ export class jsx_matriz {
              letra = "x";
              numero = this.v_solucion[i] + 1;
           }
-          res += "<tr  class=\"jsx_matriz_1n\"><td>" + letra + "<sub>" + numero + "</sub></td>";
-          res += "<td>" + this.v_costes[this.v_solucion[i]].toString() + "</td>";
+          res += "<tr  className=\"jsx_matriz_1n text-center bg-gray-100\"><td className=\"px-3 py-2 font-semibold border border-black \">" + letra + "<sub>" + numero + "</sub></td>";
+          res += "<td className=\"px-3 py-2 border border-black\">" + this.v_costes[this.v_solucion[i]].toString() + "</td>";
           for (var j = 0; j < this.variables + 1; j++) {
              if (j < this.numvariablesconh || this.v_costes[j] != 0 || j == this.variables) {
                 if (j == entra && i == sale) {
                    res += "<td class=\"jsx_matriz_pivote\">" + this.matriz[i][j].toString() + "</td>";
                 }
                 else {
-                   res += "<td>" + this.matriz[i][j].toString() + "</td>";
+                   res += "<td className=\"px-3 py-2 border border-black\">" + this.matriz[i][j].toString() + "</td>";
                 }
              }
           }
           res += "</tr>";
        }
        res = replaceAll(res, "3300444491/3", "M");
-       res += "<tr class=\"jsx_matriz_n\"><td>&nbsp;</td><td>&nbsp;</td>";
+       res += "<tr class=\"jsx_matriz_n text-center\"><td className=\"px-3 py-2 border border-black\">&nbsp;</td><td className=\"px-3 py-2 border border-black\">&nbsp;</td>";
        for (var i = 0; i < this.variables + 1; i++) {
           if (i < this.numvariablesconh || this.v_costes[i] != 0 || i == this.variables) {
              if (this.usamosM) {
-                res += "<td>" + this.v_costes_reducidosM[i].toString() + "</td>";
+                res += "<td className=\"px-3 py-2 border border-black\">" + this.v_costes_reducidosM[i].toString() + "</td>";
              }
              else {
-                res += "<td>" + this.v_costes_reducidos[i].toString() + "</td>";
+                res += "<td className=\"px-3 py-2 border border-black\">" + this.v_costes_reducidos[i].toString() + "</td>";
              }
           }
        }
@@ -257,7 +257,7 @@ export class jsx_matriz {
        res += "</table>";
        res += "<div class=\"jsx_matriz_sol\"><b>Soluci&oacute;n:</b> ";
        for (var i = 0; i < this.matriz[0].length - 2; i++) {
-          valor = 0;
+          let valor = 0;
           for (var j = 0; j < this.v_solucion.length; j++) {
              if (this.v_solucion[j] == i) {
                 valor = this.matriz[j][this.matriz[j].length - 1].toString();

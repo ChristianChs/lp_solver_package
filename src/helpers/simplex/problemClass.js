@@ -163,10 +163,10 @@ export class jsx_problema {
          return;
       }
       if (arguments[0] instanceof jsx_restriccion) {
-         console.log("inicialmente es: ",this.restricciones)
-         console.log("llego restriccion :",arguments[0])
+         // console.log("inicialmente es: ",this.restricciones)
+         // console.log("llego restriccion :",arguments[0])
          this.restricciones[this.restricciones.length] = arguments[0];
-         console.log("ahora es  :",this.restricciones)
+         // console.log("ahora es  :",this.restricciones)
       }
       else {
          alert("Error al insertar la restricci\xf3n de un problema.");
@@ -233,9 +233,11 @@ export class jsx_problema {
    }
    clone() {
       var nuevoproblema = new jsx_problema();
+      console.log("get ",this.funcionObjetivo)
+      console.log("gettipo ",this.funcionObjetivo.getTipo())
       var nuevafuncionobjetivo = new jsx_funcionObjetivo(this.funcionObjetivo.getTipo(), this.funcionObjetivo.getFuncion());
       nuevoproblema.setFuncionObjetivo(nuevafuncionobjetivo);
-      console.log("thisrestricciones", this.restricciones)
+      // console.log("thisrestricciones", this.restricciones)
 
       for (var i = 0; i < this.restricciones.length; i++) {
          var nuevarestriccion = new jsx_restriccion(this.restricciones[i].getFuncion(), this.restricciones[i].getSigno(), this.restricciones[i].getLimite().clone());

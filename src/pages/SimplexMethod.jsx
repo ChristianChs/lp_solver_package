@@ -4,7 +4,7 @@ import { Radio, RadioGroup } from "../components"
 import { jsx_funcionObjetivo, jsx_matriz, jsx_problema, jsx_restriccion } from "../helpers/simplex/";
 
 export const SimplexMethod = () => {
-    let jsx_pr = new jsx_problema();
+    var jsx_pr = new jsx_problema();
     const [obj, setObj] = useState("max");
     const [numvar, setNumvar] = useState(2);
     const [variables, setVariables] = useState([{ sign: '+', value: '' }, { sign: '+', value: '' }]);
@@ -18,6 +18,7 @@ export const SimplexMethod = () => {
     const [addElementProblema, setAddElementProblema] = useState([])
     const [jsx_pro_p1, setJsx_pro_p1] = useState('');
     const [jsx_pro_p2, setJsx_pro_p2] = useState('');
+    const [resultados,setResultados]= useState([]);
     const increment = () => {
         if (numvar < 8) {
             setNumvar(numvar + 1);
@@ -123,23 +124,26 @@ export const SimplexMethod = () => {
         // console.log(foDatos)
         const fo01 = new jsx_funcionObjetivo(obj, foDatos)
         // console.log("f001: ",fo01);
-        // jsx_pr = new jsx_problema();
+        jsx_pr = new jsx_problema();
         jsx_pr.setFuncionObjetivo(fo01)
 
-        console.log("jsxarrayrestric :", jsx_arrayRestricciones)
-        console.log("jsxarrayactivas :", jsx_arrayRestriccionesActivas);
+        // console.log("jsxarrayrestric :", jsx_arrayRestricciones)
+        // console.log("jsxarrayactivas :", jsx_arrayRestriccionesActivas);
         for (let i = 0; i < jsx_arrayRestricciones.length; i++) {
             if (jsx_arrayRestriccionesActivas[i] === true) {
-                console.log("testo ", jsx_arrayRestricciones[i])
+                // console.log("testo ", jsx_arrayRestricciones[i])
                 jsx_pr.addRestriccion(jsx_arrayRestricciones[i])
             }
         }
+        console.log("Antes de jsx_actualizarprobl en jsx_actualizar ",jsx_pr)
         jsx_actualizarProblema()
+        console.log("Despues de jsx_actualizarprobl en jsx_actualizar ",jsx_pr)
     }
 
     const jsx_actualizarProblema = () => {
+        console.log("Iniciar jsx_actualProb")
         const antiguo = jsx_pr.clone();
-        console.log("antiguo ", antiguo)
+        // console.log("antiguo ", antiguo)
         antiguo.procesar();
         const tam = antiguo.toString()
         if (tam.trim().length > 3) {
@@ -164,35 +168,35 @@ export const SimplexMethod = () => {
 
     }
     const jsx_resolver_matriz = (ma, it, es, fa) => {
-        let ma01 = ma;
+        var ma01 = ma;
         let iteracion = it;
         let tieneartificiales = es;
-        let tituloCadOld = 'Matriz inicial';
+        var tituloCadOld = 'Matriz inicial';
         if (fa == 1) {
             tituloCadOld = 'Matriz primera fase';
         } else if (fa == 2) {
             tituloCadOld = 'Matriz segunda fase';
         }
-        let finmsg = '';
+        var finmsg = '';
         do {
             if (ma01.quienEntra() != null && ma01.quienSale() != null) {
-                let entra = ma01.quienEntraX();
-                let sale = ma01.quienSaleX();
-                let tituloCad = 'Iteración ' + ((iteracion++) + 1) + ': entra ' + entra + ' y sale ' + sale;
+                var entra = ma01.quienEntraX();
+                var sale = ma01.quienSaleX();
+                var tituloCad = 'Iteración ' + ((iteracion++) + 1) + ': entra ' + entra + ' y sale ' + sale;
             } else {
-                let tituloCad = '';
+                var tituloCad = '';
                 if (!tieneartificiales) {
                     tituloCad = 'Iteración ' + (iteracion++) + ': no hay mas iteraciones';
                     if (ma01.quienEntra() != null && ma01.esMultiple() == false) {
-                        finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La soluci&oacute;n es ilimitada, la variable " + ma01.quienEntraX() + " debe entrar a la base pero ninguna puede salir.';
+                        finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La soluci&oacute;n es ilimitada, la variable ' + ma01.quienEntraX() + ' debe entrar a la base pero ninguna puede salir.';
                     }
                     if (ma01.esMultiple() == true) {
                         finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La soluci&oacute;n es m&uacute;ltiple, nos encontramos en un punto &oacute;ptimo y hay variables no b&aacute;sicas con coste reducido igual a 0.';
                     }
                 } else {
                     if (selectedMethod === 'dosfases') {
-                        tituloCad = 'Iteraci&oacute;n " + (iteracion++) + ": fin de la primera fase';
-                        let comotermino = ma01.finPrimeraFase();
+                        tituloCad = 'Iteraci&oacute;n ' + (iteracion++) + ': fin de la primera fase';
+                        var comotermino = ma01.finPrimeraFase();
                         if (comotermino == 0) {
                             finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se han expulsado todas las variables artificiales de la base.'
                         } else if (comotermino == 1) {
@@ -201,26 +205,34 @@ export const SimplexMethod = () => {
                             finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Existe una variable artificial en la base extrictamente mayor que 0, el problema es infactible.';
                         }
                     } else {
-                        tituloCad = 'Iteraci&oacute;n " + (iteracion++) + ": no hay m&aacute;s iteraciones';
+                        tituloCad = 'Iteraci&oacute;n ' + (iteracion++) + ': no hay m&aacute;s iteraciones';
                         if (ma01.finMgrande() == true) {
                             finmsg = '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Las variables artificiales que no se han expulsado de la base valen 0, son linealmente dependientes.';
                         }
                     }
                 }
             }
-            var titulo = $("<h3></h3>");
-            var enlace = $("<a></a>").attr("href", "#").html(tituloCadOld);
+
+            var titulo = "<h3><a href='#'>" + tituloCadOld + "</a></h3>";
             tituloCadOld = tituloCad;
-            titulo.append(enlace);
-            var contenido = $("<div></div>").html(ma01.toString() + finmsg);
-            cont.append(titulo);
-            cont.append(contenido);
+
+            let contenido = "<div>" + ma01.toString() + finmsg + "</div>";
+            let res = titulo+contenido;
+            console.log(res)
+            setResultados((prev)=>[...prev,parse(res)])
+
         } while (ma01.avanzar())
     }
     const handleResolverProblema = () => {
-        let antiguo = jsx_pr.clone();
+        setResultados([]);
+        jxs_actualizar();
+        console.log("step 1")
+        console.log("step data :",jsx_pr)
+        var antiguo = jsx_pr.clone();
+        console.log("step 2")
         antiguo.procesar();
-        let antiguocopia;
+        console.log("step 3")
+        var antiguocopia;
         let tieneartificiales = false;
         let fase = 0
         if (selectedMethod === 'dosfases') {
@@ -236,15 +248,16 @@ export const SimplexMethod = () => {
         } else {
             fase = 0;
         }
-        let ma01 = new jsx_matriz(antiguo);
+        var ma01 = new jsx_matriz(antiguo);
+        console.log("ma01 ",ma01)
         jsx_resolver_matriz(ma01, 0, tieneartificiales, fase);//terminar la function
         if(tieneartificiales){
             if(selectedMethod==='dosfases'){
                 if(ma01.finPrimeraFase()!=2){
-                    let temp = jsx_pr.clone();
+                    var temp = jsx_pr.clone();
                     temp.procesar();
                     fase=2;
-                    let ma02 =ma01.getSegundaFase(temp.getFuncionObjetivo());
+                    var ma02 =ma01.getSegundaFase(temp.getFuncionObjetivo());
                     jsx_resolver_matriz(ma02,0,false,fase);
                 }
             }else{}
@@ -447,8 +460,13 @@ export const SimplexMethod = () => {
                     >Resolver</button>
                 </div>
             </div>
-            <div className="border shadow-lg  p-2.5 grid gap-3">
-                Solución
+            <div id="jsx_solucion" className="border shadow-lg  p-2.5 grid gap-3">
+                <div>Solución</div>
+                <div id="jsx_solucion_pasos">
+                    {resultados}
+                </div>
+                <div>
+                </div>
             </div>
         </div>
     )

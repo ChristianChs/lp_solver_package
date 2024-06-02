@@ -63,13 +63,13 @@ export class jsx_restriccion {
         var res = "";
         for (var i = 0; i < this.funcion.length; i++) {
             if (this.funcion[i] != 0) {
-                res += (this.funcion[i] >= 0 ? (primero ? "" : "+") : "");
-                res += (this.funcion[i] == 1 ? "" : (this.funcion[i] == -1 ? "-" : this.funcion[i]));
-                res += "x<sub>" + (i + 1) + "</sub>";
+                res += (this.funcion[i] >= 0 ? (primero ? " " : "+ ") : " ");
+                res += (this.funcion[i] == 1 ? " " : (this.funcion[i] == -1 ? "- " : this.funcion[i]));
+                res += "x<sub>" + (i + 1) + "</sub> ";
                 primero = false;
             }
         }
-        res += this.signo == "<=" ? "&le;" : this.signo == "=" ? "=" : "&ge;";
+        res += this.signo == "<=" ? "&le; " : this.signo == "=" ? "= " : "&ge; ";
         res += this.limite;
         return res;
     }
