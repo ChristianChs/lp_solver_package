@@ -1,4 +1,5 @@
 import {Racional} from '../rational'
+import { eval2 } from '../utils';
 export class Restriccion {
     constructor() {
         this.x = 0;
@@ -69,7 +70,7 @@ export class Restriccion {
         }
         var puntos = [{ "x": px[0], "y": py[0] }, { "x": px[1], "y": py[1] }];
         if (p[1] == 1) {
-            if (eval((this.x * gra.x1 + this.y * (py[1] - 1)) + this.signo + this.limite)) {
+            if (eval2((this.x * gra.x1 + this.y * (py[1] - 1)) + this.signo + this.limite)) {
                 puntos.push({ "x": gra.x1, "y": gra.y1 });
                 if (p[0] == 2 || p[0] == 4) {
                     puntos.push({ "x": gra.x2, "y": gra.y1 });
@@ -89,7 +90,7 @@ export class Restriccion {
             }
         }
         else if (p[1] == 2) {
-            if (eval((this.x * gra.x2 + this.y * (py[1] + 1)) + this.signo + this.limite)) {
+            if (eval2((this.x * gra.x2 + this.y * (py[1] + 1)) + this.signo + this.limite)) {
                 puntos.push({ "x": gra.x2, "y": gra.y2 });
                 if (p[0] == 1 || p[0] == 3) {
                     puntos.push({ "x": gra.x1, "y": gra.y2 });
@@ -109,7 +110,7 @@ export class Restriccion {
             }
         }
         else if (p[1] == 3) {
-            if (eval((this.x * (px[1] + 1) + this.y * gra.y1) + this.signo + this.limite)) {
+            if (eval2((this.x * (px[1] + 1) + this.y * gra.y1) + this.signo + this.limite)) {
                 puntos.push({ "x": gra.x2, "y": gra.y1 });
                 if (p[0] == 4 || p[0] == 1) {
                     puntos.push({ "x": gra.x2, "y": gra.y2 });
@@ -129,7 +130,7 @@ export class Restriccion {
             }
         }
         else if (p[1] == 4) {
-            if (eval((this.x * (px[1] - 1) + this.y * gra.y2) + this.signo + this.limite)) {
+            if (eval2((this.x * (px[1] - 1) + this.y * gra.y2) + this.signo + this.limite)) {
                 puntos.push({ "x": gra.x1, "y": gra.y2 });
                 if (p[0] == 3 || p[0] == 2) {
                     puntos.push({ "x": gra.x1, "y": gra.y1 });
@@ -152,7 +153,7 @@ export class Restriccion {
     }
 
     cumple(nx, ny) {
-        return eval(this.x * nx + this.y * ny + this.signo + this.limite);
+        return eval2(this.x * nx + this.y * ny + this.signo + this.limite);
       }
       corteRestriccion(res) {
         var pendiente1 = (this.x * -1) / this.y;

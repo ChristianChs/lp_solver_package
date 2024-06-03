@@ -1,3 +1,5 @@
+import { eval2 } from "../utils";
+
 function FuncionObjetivo() {
     if (arguments.length == 3) {
       this.obj = arguments[0];
@@ -9,7 +11,7 @@ function FuncionObjetivo() {
     }
   }
   FuncionObjetivo.prototype.resolver = function (v1, v2) {
-    return eval(this.x * v1 + this.y * v2);
+    return eval2(this.x * v1 + this.y * v2);
   }
   FuncionObjetivo.prototype.toString = function () {
     return this.obj + ": " + this.x + "X" + (this.y < 0 ? this.y : "+" + this.y) + "Y";
@@ -84,7 +86,7 @@ function FuncionObjetivo() {
     var puntos = [{ "x": px[0], "y": py[0] }, { "x": px[1], "y": py[1] }];
     if (p[1] == 1) {
         console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
-      if (eval((this.x * gra.x1 + this.y * (py[1] - 1)) + this.signo + this.limite)) {
+      if (eval2((this.x * gra.x1 + this.y * (py[1] - 1)) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x1, "y": gra.y1 });
         if (p[0] == 2 || p[0] == 4) {
           puntos.push({ "x": gra.x2, "y": gra.y1 });
@@ -105,7 +107,7 @@ function FuncionObjetivo() {
     }
     else if (p[1] == 2) {
         console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
-      if (eval((this.x * gra.x2 + this.y * (py[1] + 1)) + this.signo + this.limite)) {
+      if (eval2((this.x * gra.x2 + this.y * (py[1] + 1)) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x2, "y": gra.y2 });
         if (p[0] == 1 || p[0] == 3) {
           puntos.push({ "x": gra.x1, "y": gra.y2 });
@@ -126,7 +128,7 @@ function FuncionObjetivo() {
     }
     else if (p[1] == 3) {
         console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
-      if (eval((this.x * (px[1] + 1) + this.y * gra.y1) + this.signo + this.limite)) {
+      if (eval2((this.x * (px[1] + 1) + this.y * gra.y1) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x2, "y": gra.y1 });
         if (p[0] == 4 || p[0] == 1) {
           puntos.push({ "x": gra.x2, "y": gra.y2 });
@@ -147,7 +149,7 @@ function FuncionObjetivo() {
     }
     else if (p[1] == 4) {
         console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
-      if (eval((this.x * (px[1] - 1) + this.y * gra.y2) + this.signo + this.limite)) {
+      if (eval2((this.x * (px[1] - 1) + this.y * gra.y2) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x1, "y": gra.y2 });
         if (p[0] == 3 || p[0] == 2) {
           puntos.push({ "x": gra.x1, "y": gra.y1 });
@@ -175,7 +177,7 @@ function FuncionObjetivo() {
     console.log("first3", ny)
     console.log("first4", this.signo)
     console.log("first5", this.limite)
-    return eval(this.x * nx + this.y * ny + this.signo + this.limite);
+    return eval2(this.x * nx + this.y * ny + this.signo + this.limite);
   }
   Restriccion.prototype.corteRestriccion = function (res) {
     var pendiente1 = (this.x * -1) / this.y;
@@ -755,7 +757,7 @@ export class Grafica {
                     usados[candidato] = true;
                 }
             } while (candidato != -1);
-            this.c2d.fillStyle = "rgba(5,175,0,0.7)";
+            this.c2d.fillStyle = "rgba(0, 10, 255, 0.7)";
             this.c2d.beginPath();
             var p = this.getPunto(punticos[0].x, punticos[0].y);
             this.c2d.moveTo(p.x + 0.5, p.y + 0.5);
@@ -1038,6 +1040,13 @@ export class Grafica {
                 }
             }
         }
+    }
+    changeEjes(value){
+        this.setX2(value+4);
+        this.setY2(value);
+        this.procesarParametros();
+        this.configurarCanvas();
+        this.dibujar();
     }
 }
 

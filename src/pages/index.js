@@ -1,3 +1,3 @@
-export * from './Principal';
-export * from './GraphicMethod';
-export * from './SimplexMethod';
+export * from './Main';
+export * from './Graphic';
+export * from './Simplex';

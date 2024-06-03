@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import parse from 'html-react-parser'
 import { jsx_funcionObjetivo, jsx_matriz, jsx_problema, jsx_restriccion } from "../helpers/simplex/";
+import { Link } from "react-router-dom";
 export const Simplex = () => {
     var jsx_pr = new jsx_problema();
     const [obj, setObj] = useState("max");
@@ -17,6 +18,13 @@ export const Simplex = () => {
     const [jsx_pro_p1, setJsx_pro_p1] = useState('');
     const [jsx_pro_p2, setJsx_pro_p2] = useState('');
     const [resultados, setResultados] = useState([]);
+    const generarNoNegatividad = () => {
+        const variable = []
+        for (let i = 1; i <= numvar; i++) {
+            variable.push(<span key={i}>X<sub>{i}</sub>{i < numvar ? ', ' : ''}</span>);
+        }
+        return <>{variable} &ge; 0</>;
+    }
     const increment = () => {
         if (numvar < 8) {
             setNumvar(numvar + 1);
@@ -97,7 +105,7 @@ export const Simplex = () => {
         cadena += `${sign}${limiteParsed}`;
         cadenaaux.push(desigualdad)
         cadenaaux.push(limiteParsed)
-    
+
         addElement(cadenaaux);
         const nuevaRestriccion = {
             cadena,
@@ -213,7 +221,7 @@ export const Simplex = () => {
             tituloCadOld = tituloCad;
 
             let contenido = "<div>" + ma01.toString() + finmsg + "</div>";
-            let res = "<div className=\"pt-2\">"+titulo + contenido+"</div>";
+            let res = "<div className=\"pt-2\">" + titulo + contenido + "</div>";
             console.log(res)
             setResultados((prev) => [...prev, parse(res)])
 
@@ -268,9 +276,9 @@ export const Simplex = () => {
     }, [jsx_arrayRestricciones, selectedMethod])
     return (
         <div className="flex flex-col items-center justify-center  bg-gray-50">
-            <h1 className="text-3xl font-bold mb-8 mt-6 text-gray-700">
-                Proyecto de Investigación Operativa - Método Simplex
-            </h1>
+            <Link to={'/'}>
+                <h1 className="text-3xl font-bold mb-8 mt-6 text-gray-700">Método Simplex</h1>
+            </Link>
             <div className="grid grid-cols-1 gap-6 w-full max-w-6xl mb-6">
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col">
                     <h2 className="text-xl font-semibold mb-2 text-gray-600">Función Objetivo</h2>
@@ -410,6 +418,9 @@ export const Simplex = () => {
                             <ul>
                                 {addElementProblema}
                             </ul>
+                            {
+                                generarNoNegatividad()
+                            }
                         </div>
                     </div>
                 </div>

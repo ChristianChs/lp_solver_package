@@ -1,3 +1,5 @@
+import { eval2 } from "../utils";
+
 export class FuncionObjetivo {
     constructor() {
         if (arguments.length == 3) {
@@ -10,7 +12,7 @@ export class FuncionObjetivo {
         }
     }
     resolver(v1, v2) {
-        return eval(this.x * v1 + this.y * v2);
+        return eval2(this.x * v1 + this.y * v2);
     }
     toString() {
         return this.obj + ": " + this.x + "X" + (this.y < 0 ? this.y : "+" + this.y) + "Y";

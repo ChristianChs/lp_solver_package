@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react"
 import { Grafica, Restriccion, FuncionObjetivo } from '../helpers'
 import { Input } from "../components/"
 import { Select } from '../components/graphics/Select'
+import { Link } from "react-router-dom"
+import { eval2 } from "../helpers/utils"
 
 export const Graphic = () => {
     const canvasRef = useRef(null);
@@ -15,13 +17,20 @@ export const Graphic = () => {
     const [nrestSigno, setNrestSigno] = useState('<=');
     const [nrestLimite, setNrestLimite] = useState('');
     const [restricciones, setRestricciones] = useState([]);
-    const [isChecked, setIsChecked] = useState(true); // true si quieres que esté marcado por defecto
-    const [ejes,setEjes]= useState(10)
+    const [ejes, setEjes] = useState(10)
     const g00 = useRef(null);
-    const handleCheckboxChange = (event) => {
-        setIsChecked(event.target.checked);
-    };
+   
+    const alejarGrafica = () => {
+        setEjes(ejes + 10);
+        g00.current.changeEjes(ejes + 10)
+    }
+    const acercarGrafica = () => {
+        if (ejes > 10) {
 
+            setEjes(ejes - 10);
+            g00.current.changeEjes(ejes - 10)
+        }
+    }
     const parsearRestriccion = (objeto) => {
         return objeto.x + "x" + objeto.op + objeto.y + "y" + objeto.signo + objeto.limite;
     }
@@ -40,8 +49,7 @@ export const Graphic = () => {
         setNrestX('');
         setNrestY('');
         setNrestLimite('');
-
-        const newRest = new Restriccion(nrest.x, eval(nrest.op + nrest.y), nrest.signo, nrest.limite, nrest.mostrable);
+        const newRest = new Restriccion(nrest.x, eval2(nrest.op + nrest.y), nrest.signo, nrest.limite, nrest.mostrable);
         console.log(newRest)
         if (g00.current) {
             g00.current.addRestriccion(newRest);
@@ -58,14 +66,14 @@ export const Graphic = () => {
         g00.current.delRestriccion(parsearRestriccion(res))
     };
     const nuevaFuncionObjetivo = () => {
-        let fo = new FuncionObjetivo(foObj, foX, eval(foOp + foY));
+        let fo = new FuncionObjetivo(foObj, foX, eval2(foOp + foY));
         g00.current.setFuncionObjetivo(fo);
+        console.log("paso")
     }
 
     useEffect(() => {
         g00.current = new Grafica();
-      //g00.current.set("lienzo", 0.1, 0, 10, 0, 10, 100, 10, true, true, 0, 0);
-        g00.current.set("lienzo", 0.1, 0, ejes, 0, ejes, 10, 1, true, true, 0, 0);
+        g00.current.set("lienzo", 0.1, 0, ejes + 4, 0, ejes, 10, 1, true, true, 0, 0);
         g00.current.dibujar();
         // Manejar el evento mousemove del canvas
         const handleCanvasMousemove = (event) => {
@@ -73,38 +81,26 @@ export const Graphic = () => {
                 g00.current.dibujarDatos(event);
             }
         };
-        // Manejar el evento wheel del canvas
-        const handleCanvasWheel = (event) => {
-            if (event.deltaY < 0) {
-                console.log('Wheel moved up');
-                setEjes((prev)=>ejes+1)
-                g00.current.set(0,ejes,0,ejes,10,1,true,true,0,0);
-                g00.current.dibujar();
-                // Tu lógica para el movimiento hacia arriba
-            } else {
-                console.log('Wheel moved down');
-                setEjes((prev)=>ejes-1)
-                // Tu lógica para el movimiento hacia abajo
-            }
-        };
+
         const canvasElement = document.getElementById("lienzo");
         if (canvasElement) {
             canvasElement.addEventListener('mousemove', handleCanvasMousemove);
-            canvasElement.addEventListener('wheel', handleCanvasWheel);
         }
 
         // Remover el event listener cuando el componente se desmonta
         return () => {
             if (canvasElement) {
                 canvasElement.removeEventListener('mousemove', handleCanvasMousemove);
-                canvasElement.removeEventListener('wheel', handleCanvasWheel);
             }
         };
-    }, [ejes,])
+    }, [])
+
     return (
         <div className="flex flex-col md:flex-row items-center justify-center h-screen bg-gray-50 dark:bg-gray-900 p-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full md:w-1/2 h-5/6">
-                <h1 className="text-3xl font-bold mb-8 text-gray-700 dark:text-gray-300">Método Gráfico</h1>
+                <Link to={'/'}>
+                    <h1 className="text-3xl font-bold mb-8 text-gray-700 dark:text-gray-300">Método Gráfico</h1>
+                </Link>
                 <div className="grid grid-cols-1 gap-6">
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4 text-gray-600 dark:text-gray-300">Función Objetivo</h2>
@@ -175,9 +171,12 @@ export const Graphic = () => {
                                             // value="-"
                                             onClick={() => eliminarRestriccion(index)}
                                         ><XIcon className="w-4 h-5" /></button>
-                                        <span>{` ${rest.x} ${rest.op} ${rest.y} ${rest.signo} ${rest.limite}`}</span>
+                                        <span>{rest.x}X<sub>1</sub> {rest.op} {rest.y}X<sub>2</sub> {rest.signo + ' ' + rest.limite}</span>
                                     </div>
                                 ))}
+                                <div className="flex items-center p-1">
+                                    <span>X<sub>1</sub>, X <sub>2</sub>	&ge; 0</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,6 +187,20 @@ export const Graphic = () => {
                 <div className="grid grid-cols-1 gap-2">
                     <div className="" >
                         <canvas ref={canvasRef} id="lienzo" width="700" height="500"></canvas>
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <button
+                            className="bg-gray-900 text-white rounded-md px-3 mx-2"
+                            onClick={alejarGrafica}
+                        >
+                            Alejar
+                        </button>
+                        <button
+                            className="bg-gray-900 text-white rounded-md px-3 mx-2"
+                            onClick={acercarGrafica}
+                        >
+                            Acercar
+                        </button>
                     </div>
                 </div>
             </div>
