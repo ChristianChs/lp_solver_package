@@ -85,7 +85,6 @@ function FuncionObjetivo() {
     }
     var puntos = [{ "x": px[0], "y": py[0] }, { "x": px[1], "y": py[1] }];
     if (p[1] == 1) {
-        console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
       if (eval2((this.x * gra.x1 + this.y * (py[1] - 1)) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x1, "y": gra.y1 });
         if (p[0] == 2 || p[0] == 4) {
@@ -106,7 +105,6 @@ function FuncionObjetivo() {
       }
     }
     else if (p[1] == 2) {
-        console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
       if (eval2((this.x * gra.x2 + this.y * (py[1] + 1)) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x2, "y": gra.y2 });
         if (p[0] == 1 || p[0] == 3) {
@@ -127,7 +125,6 @@ function FuncionObjetivo() {
       }
     }
     else if (p[1] == 3) {
-        console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
       if (eval2((this.x * (px[1] + 1) + this.y * gra.y1) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x2, "y": gra.y1 });
         if (p[0] == 4 || p[0] == 1) {
@@ -148,7 +145,6 @@ function FuncionObjetivo() {
       }
     }
     else if (p[1] == 4) {
-        console.log("ess",(this.x * gra.x1 + this.y * (py[1] - 1)) , " ",this.signo ," ", this.limite )
       if (eval2((this.x * (px[1] - 1) + this.y * gra.y2) + this.signo + this.limite)) {
         puntos.push({ "x": gra.x1, "y": gra.y2 });
         if (p[0] == 3 || p[0] == 2) {
@@ -171,12 +167,6 @@ function FuncionObjetivo() {
     return puntos;
   }
   Restriccion.prototype.cumple = function (nx, ny) {
-    console.log("first", this.x)
-    console.log("first1", nx)
-    console.log("first2", this.y)
-    console.log("first3", ny)
-    console.log("first4", this.signo)
-    console.log("first5", this.limite)
     return eval2(this.x * nx + this.y * ny + this.signo + this.limite);
   }
   Restriccion.prototype.corteRestriccion = function (res) {
@@ -431,6 +421,10 @@ export class Grafica {
     }
     clearRestricciones() {
         this.restricciones = new Array();
+        this.redibujarContenido();
+    }
+    clearFuncionObjetivo(){
+        this.funcionObjetivo=null;
         this.redibujarContenido();
     }
     getPunto(x, y) {

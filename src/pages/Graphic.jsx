@@ -11,15 +11,34 @@ export const Graphic = () => {
     const [foY, setFotY] = useState('');
     const [foOp, setFotOp] = useState('+');
     const [foObj, setFoObj] = useState('+');
+
     const [nrestX, setNrestX] = useState('');
     const [nrestY, setNrestY] = useState('');
     const [nrestOp, setNrestOp] = useState('+');
     const [nrestSigno, setNrestSigno] = useState('<=');
     const [nrestLimite, setNrestLimite] = useState('');
+
     const [restricciones, setRestricciones] = useState([]);
     const [ejes, setEjes] = useState(10)
     const g00 = useRef(null);
-   
+
+    const limpiarDatos = () => {
+        setFotX('');
+        setFotY('');
+        setFotOp('+');
+        setFoObj('+');
+
+        setNrestX('');
+        setNrestY('');
+        setNrestOp('+');
+        setNrestSigno('<=');
+        setNrestLimite('');
+
+        g00.current.clearRestricciones();
+        setRestricciones([])
+        g00.current.clearFuncionObjetivo();
+
+    }
     const alejarGrafica = () => {
         setEjes(ejes + 10);
         g00.current.changeEjes(ejes + 10)
@@ -50,7 +69,6 @@ export const Graphic = () => {
         setNrestY('');
         setNrestLimite('');
         const newRest = new Restriccion(nrest.x, eval2(nrest.op + nrest.y), nrest.signo, nrest.limite, nrest.mostrable);
-        console.log(newRest)
         if (g00.current) {
             g00.current.addRestriccion(newRest);
         }
@@ -58,8 +76,6 @@ export const Graphic = () => {
 
     const eliminarRestriccion = (index) => {
         const res = restricciones[index]
-        console.log("reseliminar ")
-        console.log(res)
         const newRestricciones = [...restricciones];
         newRestricciones.splice(index, 1);
         setRestricciones(newRestricciones);
@@ -68,7 +84,6 @@ export const Graphic = () => {
     const nuevaFuncionObjetivo = () => {
         let fo = new FuncionObjetivo(foObj, foX, eval2(foOp + foY));
         g00.current.setFuncionObjetivo(fo);
-        console.log("paso")
     }
 
     useEffect(() => {
@@ -110,6 +125,7 @@ export const Graphic = () => {
                                     Tipo
                                 </label>
                                 <Select id="fo_obj" options={[{ value: 'max', label: 'MAX' }, { value: 'min', label: 'MIN' }]}
+                                    value={foObj} onChange={(e) => { setFoObj(e.target.value) }}
                                 />
                                 <Input id="fo_x" label="X1" type={false}
                                     value={foX} onChange={(e) => setFotX(e.target.value)}
@@ -201,6 +217,13 @@ export const Graphic = () => {
                         >
                             Acercar
                         </button>
+
+                        <button
+                            className="bg-gray-900 text-white rounded-md px-3 mx-2"
+                            type="button"
+                            onClick={limpiarDatos}
+                        >Borrar Gráfico</button>
+
                     </div>
                 </div>
             </div>

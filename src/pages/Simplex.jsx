@@ -18,6 +18,24 @@ export const Simplex = () => {
     const [jsx_pro_p1, setJsx_pro_p1] = useState('');
     const [jsx_pro_p2, setJsx_pro_p2] = useState('');
     const [resultados, setResultados] = useState([]);
+
+    const limpiarDatos = () => {
+        setObj('max');
+        setNumvar(2);
+        setVariables([{ sign: '+', value: '' }, { sign: '+', value: '' }]);
+        setRestricciones([{ sign: '+', value: '' }, { sign: '+', value: '' }])
+        setDesigualdad('<=');
+        setLimite('');
+        setHiddenMethod(true)
+        setSelectedMethod('dosfases');
+        setJsx_arrayRestricciones([])
+        setJsx_arrayRestriccionesActivas([])
+        setAddElementProblema([])
+        setJsx_pro_p1('');
+        setJsx_pro_p2('');
+        setResultados([]);
+        jsx_pr= new jsx_problema();
+    }
     const generarNoNegatividad = () => {
         const variable = []
         for (let i = 1; i <= numvar; i++) {
@@ -41,7 +59,6 @@ export const Simplex = () => {
         }
     }
     const addElement = (numItems) => {
-        // console.log(numItems)
         const newList = (
             <li key={addElementProblema.length}>
                 {numItems.map((item, index) => {
@@ -71,7 +88,6 @@ export const Simplex = () => {
         setRestricciones(newRestricciones);
     }
     const handleLimiteChange = (value) => {
-        // console.log(value)
         setLimite(value)
     }
     const handleChangeMethod = (event) => {
@@ -97,11 +113,8 @@ export const Simplex = () => {
         });
 
         if (!distintocero) return;
-        // console.log("desigualdad : ", desigualdad)
         let sign = desigualdad === '<=' ? "&le;" : desigualdad === '=' ? "=" : "&ge;";
-        // console.log("limite : ", limite)
         let limiteParsed = isNaN(parseFloat(limite)) ? 0 : limite;
-        // console.log("EQUIS : ", equis)
         cadena += `${sign}${limiteParsed}`;
         cadenaaux.push(desigualdad)
         cadenaaux.push(limiteParsed)
@@ -113,7 +126,6 @@ export const Simplex = () => {
             desigualdad,
             limite: limiteParsed
         };
-        // console.log("exis ",equis)
         const re01 = new jsx_restriccion(equis, desigualdad, limiteParsed);
         setJsx_arrayRestricciones(prevArray => [...prevArray, re01]);
         setJsx_arrayRestriccionesActivas(prevArray => [...prevArray, true]);
@@ -124,30 +136,19 @@ export const Simplex = () => {
     }
     const jxs_actualizar = () => {
         const foDatos = variables.map(item => item.value === "" ? 0 : `${item.sign}${item.value}`);
-        // console.log(obj)
-        // console.log(foDatos)
         const fo01 = new jsx_funcionObjetivo(obj, foDatos)
-        // console.log("f001: ",fo01);
         jsx_pr = new jsx_problema();
         jsx_pr.setFuncionObjetivo(fo01)
-
-        // console.log("jsxarrayrestric :", jsx_arrayRestricciones)
-        // console.log("jsxarrayactivas :", jsx_arrayRestriccionesActivas);
         for (let i = 0; i < jsx_arrayRestricciones.length; i++) {
             if (jsx_arrayRestriccionesActivas[i] === true) {
-                // console.log("testo ", jsx_arrayRestricciones[i])
                 jsx_pr.addRestriccion(jsx_arrayRestricciones[i])
             }
         }
-        console.log("Antes de jsx_actualizarprobl en jsx_actualizar ", jsx_pr)
         jsx_actualizarProblema()
-        console.log("Despues de jsx_actualizarprobl en jsx_actualizar ", jsx_pr)
     }
 
     const jsx_actualizarProblema = () => {
-        console.log("Iniciar jsx_actualProb")
         const antiguo = jsx_pr.clone();
-        // console.log("antiguo ", antiguo)
         antiguo.procesar();
         const tam = antiguo.toString()
         if (tam.trim().length > 3) {
@@ -222,7 +223,6 @@ export const Simplex = () => {
 
             let contenido = "<div>" + ma01.toString() + finmsg + "</div>";
             let res = "<div className=\"pt-2\">" + titulo + contenido + "</div>";
-            console.log(res)
             setResultados((prev) => [...prev, parse(res)])
 
         } while (ma01.avanzar())
@@ -230,12 +230,8 @@ export const Simplex = () => {
     const handleResolverProblema = () => {
         setResultados([]);
         jxs_actualizar();
-        console.log("step 1")
-        console.log("step data :", jsx_pr)
         var antiguo = jsx_pr.clone();
-        console.log("step 2")
         antiguo.procesar();
-        console.log("step 3")
         var antiguocopia;
         let tieneartificiales = false;
         let fase = 0
@@ -253,7 +249,6 @@ export const Simplex = () => {
             fase = 0;
         }
         var ma01 = new jsx_matriz(antiguo);
-        console.log("ma01 ", ma01)
         jsx_resolver_matriz(ma01, 0, tieneartificiales, fase);//terminar la function
         if (tieneartificiales) {
             if (selectedMethod === 'dosfases') {
@@ -286,7 +281,7 @@ export const Simplex = () => {
                         <input
                             type="button"
                             value="Maximizar"
-                            className={`rounded-md border shadow-sm py-1 mr-4 w-full transition-colors ${obj === 'max'
+                            className={`rounded-md border shadow-sm py-1 mr-4 w-full transition-colors cursor-pointer ${obj === 'max'
                                 ? 'bg-gray-900 text-gray-50 dark:bg-gray-50 dark:text-gray-900'
                                 : 'hover:bg-gray-900 hover:text-gray-50 dark:hover:bg-gray-50 dark:hover:text-gray-900'
                                 }`}
@@ -295,7 +290,7 @@ export const Simplex = () => {
                         <input
                             type="button"
                             value="Minimizar"
-                            className={`rounded-md border shadow-sm py-1 mr-4 w-full transition-colors ${obj === 'min'
+                            className={`rounded-md border shadow-sm py-1 mr-4 w-full transition-colors cursor-pointer ${obj === 'min'
                                 ? 'bg-gray-900 text-gray-50 dark:bg-gray-50 dark:text-gray-900'
                                 : 'hover:bg-gray-900 hover:text-gray-50 dark:hover:bg-gray-50 dark:hover:text-gray-900'
                                 }`}
@@ -472,6 +467,13 @@ export const Simplex = () => {
                             className="border rounded-md w-36 bg-gray-900 text-gray-50"
                             onClick={handleResolverProblema}
                         >Resolver</button>
+                    </div>
+                    <div>
+                        <button
+                            id="jsx_res_fo_boton"
+                            className="border rounded-md w-36 bg-gray-900 text-gray-50"
+                            onClick={limpiarDatos}
+                        >Nuevo Problema</button>
                     </div>
                 </div>
 
