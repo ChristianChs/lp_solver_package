@@ -26,7 +26,7 @@ export const Main = () => {
                     </p>
                 </Link>
                 <Link
-                    to='transporte-noroeste'
+                    to='transport-nw'
                     className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center justify-center"
                 >
                     <CalculatorIcon className="w-12 h-12 text-gray-600 dark:text-gray-400 mb-4" />
