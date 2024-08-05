@@ -16,7 +16,10 @@
     "mathjs": "^13.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "react-hook-form": "^7.49.2",
+    "transport-methods": "^1.0.1",
+    "graphviz-react": "^1.2.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

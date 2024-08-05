@@ -25,6 +25,46 @@ export const Main = () => {
                         Resuelve problemas de programación lineal utilizando el método simplex.
                     </p>
                 </Link>
+                <Link
+                    to='transporte-noroeste'
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center justify-center"
+                >
+                    <CalculatorIcon className="w-12 h-12 text-gray-600 dark:text-gray-400 mb-4" />
+                    <h2 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">Método Transporte - Noroeste</h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">
+                        Resuelve problemas de programación lineal utilizando el método simplex.
+                    </p>
+                </Link>
+                <Link
+                    to='transporte-costominimo'
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center justify-center"
+                >
+                    <CalculatorIcon className="w-12 h-12 text-gray-600 dark:text-gray-400 mb-4" />
+                    <h2 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">Método Transporte - Costo Mínimo</h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">
+                        Resuelve problemas de programación lineal utilizando el método simplex.
+                    </p>
+                </Link>
+                <Link
+                    to='critical-route'
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center justify-center"
+                >
+                    <CalculatorIcon className="w-12 h-12 text-gray-600 dark:text-gray-400 mb-4" />
+                    <h2 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">Método de la Ruta Crítica CPM</h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">
+                        Resuelve problemas de programación lineal utilizando el método simplex.
+                    </p>
+                </Link>
+                <Link
+                    to='pert'
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col items-center justify-center"
+                >
+                    <CalculatorIcon className="w-12 h-12 text-gray-600 dark:text-gray-400 mb-4" />
+                    <h2 className="text-xl font-semibold mb-2 text-gray-700 dark:text-gray-300">Método PERT</h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-center">
+                        Resuelve problemas de programación lineal utilizando el método simplex.
+                    </p>
+                </Link>
             </div>
         </div>
     )
