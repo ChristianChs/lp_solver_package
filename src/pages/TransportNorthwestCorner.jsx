@@ -1,37 +1,31 @@
-import { useState ,useEffect} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import useNorthWest from "../hooks/useNorthWestCorner"
+import useTransportMethods from "../hooks/useTransportMethods"
 
 export const TransportNorthwestCorner = () => {
 
-    const { solveProblem ,resultados} = useNorthWest()
-    const [numvar, setNumvar] = useState(3);
+    const { solveProblem ,resultados,setResultados} = useTransportMethods()
     const [numOrigen, setNumOrigen] = useState(1);
     const [numDestino, setNumDestino] = useState(1);
     const [origenes, setOrigenes] = useState([]);
     const [destinos, setDestinos] = useState([]);
     const [rutas, setRutas] = useState([]);
 
-    const [nombreOrigen, setNombreOrigen] = useState('');
     const [ofertaOrigen, setOfertaOrigen] = useState('');
 
-    const [nombreDestino, setNombreDestino] = useState('');
     const [demandaDestino, setDemandaDestino] = useState('');
 
     const [rutaDesde, setRutaDesde] = useState('');
     const [rutaHacia, setRutaHacia] = useState('');
     const [rutaCosto, setRutaCosto] = useState('');
-    const increment = () => {
-        if (numvar < 8) {
-            setNumvar(numvar + 1);
-        }
+    const handleReset = () => {
+        setNumOrigen(1);
+        setNumDestino(1);
+        setOrigenes([]);
+        setDestinos([]);
+        setRutas([]);
+        setResultados('');
     }
-    const decrement = () => {
-        if (numvar > 2) {
-            setNumvar(numvar > 2 ? numvar - 1 : 2);
-        }
-    }
-
     const addOrigen = () => {
         const nO = numOrigen;
         if (ofertaOrigen) {
@@ -113,13 +107,9 @@ export const TransportNorthwestCorner = () => {
             destinations: destinos,
             routes: rutas,
         };
-        solveProblem(convertToMatrices(transportationData));
+        solveProblem(convertToMatrices(transportationData),1);
     }
 
-    useEffect(() => {
-        // setNombreOrigen(`O${numOrigen+1}`)
-        // setNombreDestino(`D${numDestino+1}`)
-    }, [])
     
     return (
         <div className="flex flex-col items-center justify-center  bg-gray-50">
@@ -267,6 +257,12 @@ export const TransportNorthwestCorner = () => {
                             className="border rounded-md w-36 bg-gray-900 text-gray-50"
                             onClick={handleSubmit}
                         >Resolver</button>
+                        <button
+                            className="ml-2 border rounded-md px-2 bg-gray-900 text-gray-50 hover:bg-gray-100 hover:text-black transition-colors"
+                            onClick={handleReset}
+                        >
+                            Nuevo Problema
+                        </button>
                     </div>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col">

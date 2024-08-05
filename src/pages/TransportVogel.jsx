@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useTransportMethods from "../hooks/useTransportMethods"
-export const TransportMinimumCost = () => {
+export const TransportVogel = () => {
 
-    const { solveProblem, resultados,setResultados } = useTransportMethods()
+    const { solveProblem ,resultados,setResultados} = useTransportMethods()
     const [numOrigen, setNumOrigen] = useState(1);
     const [numDestino, setNumDestino] = useState(1);
     const [origenes, setOrigenes] = useState([]);
@@ -17,7 +17,7 @@ export const TransportMinimumCost = () => {
     const [rutaDesde, setRutaDesde] = useState('');
     const [rutaHacia, setRutaHacia] = useState('');
     const [rutaCosto, setRutaCosto] = useState('');
-
+    
     const handleReset = () => {
         setNumOrigen(1);
         setNumDestino(1);
@@ -26,13 +26,12 @@ export const TransportMinimumCost = () => {
         setRutas([]);
         setResultados('');
     }
-
     const addOrigen = () => {
         const nO = numOrigen;
         if (ofertaOrigen) {
             // setOrigenes([...origenes, { name: nombreOrigen, supply: Number(ofertaOrigen) }]);
             setOrigenes([...origenes, { name: `O${nO}`, supply: Number(ofertaOrigen) }]);
-            setNumOrigen(numOrigen + 1);
+            setNumOrigen(numOrigen+1);
             // setNombreOrigen(`O${numOrigen+1}`);
             setOfertaOrigen('');
         }
@@ -40,10 +39,10 @@ export const TransportMinimumCost = () => {
 
     const addDestino = () => {
         const nD = numDestino;
-        if (demandaDestino) {
+        if ( demandaDestino) {
             // setDestinos([...destinos, { name: nombreDestino, demand: Number(demandaDestino) }]);
             setDestinos([...destinos, { name: `D${nD}`, demand: Number(demandaDestino) }]);
-            setNumDestino(numDestino + 1);
+            setNumDestino(numDestino+1);
             // setNombreDestino(`D${numDestino+1}`);
             setDemandaDestino('');
         }
@@ -82,7 +81,7 @@ export const TransportMinimumCost = () => {
         }
         return '-';
     };
-    const convertToMatrices = (data) => {
+    const convertToMatrices=(data)=> {
         const costMatrix = data.routes.map(route => {
             const costs = data.destinations.map(destination => {
                 const routeToDestination = route.to.find(dest => dest.destination === destination.name);
@@ -90,11 +89,11 @@ export const TransportMinimumCost = () => {
             });
             return costs;
         });
-
+    
         const supply = data.originations.map(origination => origination.supply);
-
+    
         const demand = data.destinations.map(destination => destination.demand);
-
+    
         return {
             costMatrix,
             supply,
@@ -108,19 +107,19 @@ export const TransportMinimumCost = () => {
             destinations: destinos,
             routes: rutas,
         };
-        solveProblem(convertToMatrices(transportationData), 2);
+        solveProblem(convertToMatrices(transportationData),3);
     }
 
-
-
+    
+    
     return (
         <div className="flex flex-col items-center justify-center  bg-gray-50">
             <Link to={'/'}>
-                <h1 className="text-3xl font-bold mb-8 mt-6 text-gray-700">Método Transporte Costo Mínimo</h1>
+                <h1 className="text-3xl font-bold mb-8 mt-6 text-gray-700">Método Transporte Aproximación de Vogel</h1>
             </Link>
             <div className="grid grid-cols-1 gap-6 w-full max-w-6xl mb-6">
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 flex flex-col">
-
+                    
                     <h3 className="text-xl font-semibold mb-2 text-gray-600">Planteamiento</h3>
                     <div className="mb-4 flex items-center">
                         <label className="block mr-4 w-20 text-gray-500 dark:text-gray-400">
