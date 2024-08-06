@@ -3,74 +3,73 @@ import { useState } from 'react';
 const useTransportMethods = () => {
     const [resultados, setResultados] = useState('');
     const balanceProblema = (costoMatriz, oferta, demanda) => {
-        const totalSupply = oferta.reduce((acc, val) => acc + val, 0);
-        const totalDemand = demanda.reduce((acc, val) => acc + val, 0);
+        const totalOferta = oferta.reduce((acc, val) => acc + val, 0);
+        const totalDemanda = demanda.reduce((acc, val) => acc + val, 0);
 
-        if (totalSupply > totalDemand) {
-            // Add dummy column
+        if (totalOferta > totalDemanda) {
             const dummyColumn = Array(oferta.length).fill(0);
             for (let i = 0; i < costoMatriz.length; i++) {
                 costoMatriz[i].push(0); // Cost for dummy column is 0
             }
-            demanda.push(totalSupply - totalDemand);
-        } else if (totalDemand > totalSupply) {
+            demanda.push(totalOferta - totalDemanda);
+        } else if (totalDemanda > totalOferta) {
             // Add dummy row
             const dummyRow = Array(demanda.length).fill(0);
             costoMatriz.push(dummyRow);
-            oferta.push(totalDemand - totalSupply);
+            oferta.push(totalDemanda - totalOferta);
         }
     }
-    function printMatrix(costMatrix, supply, demand) {
-        let matrixHTML = '<table  className="w-full border border-gray-300 dark:border-gray-600">';
-        matrixHTML += '<thead><tr class="bg-gray-800 text-white">';
-        matrixHTML += '<th className="p-2 border border-gray-300 dark:border-gray-600">Origen / Destino</th>';
-        for (let i = 0; i < demand.length; i++) {
-            matrixHTML += `<th className="p-2 border border-gray-300 dark:border-gray-600">D${i + 1}</th>`;
+    function printMatriz(costoMatriz, oferta, demanda) {
+        let matrizHTML = '<table  className="w-full border border-gray-300 dark:border-gray-600">';
+        matrizHTML += '<thead><tr class="bg-gray-800 text-white">';
+        matrizHTML += '<th className="p-2 border border-gray-300 dark:border-gray-600">Origen / Destino</th>';
+        for (let i = 0; i < demanda.length; i++) {
+            matrizHTML += `<th className="p-2 border border-gray-300 dark:border-gray-600">D${i + 1}</th>`;
         }
-        matrixHTML += '<th className="p-2 border border-gray-300 dark:border-gray-600">Oferta</th>';
-        matrixHTML += '</tr></thead>';
-        for (let i = 0; i < costMatrix.length; i++) {
-            matrixHTML += '<tr className="hover:bg-gray-100 dark:hover:bg-gray-700">';
-            matrixHTML += `<td className="bg-gray-100 dark:bg-gray-700 font-bold p-2 border border-gray-300 dark:border-gray-600">O${i + 1}</td>`;
-            for (let j = 0; j < costMatrix[i].length; j++) {
-                matrixHTML += `<td className="text-center p-2 border border-gray-300 dark:border-gray-600">${costMatrix[i][j]}</td>`;
+        matrizHTML += '<th className="p-2 border border-gray-300 dark:border-gray-600">Oferta</th>';
+        matrizHTML += '</tr></thead>';
+        for (let i = 0; i < costoMatriz.length; i++) {
+            matrizHTML += '<tr className="hover:bg-gray-100 dark:hover:bg-gray-700">';
+            matrizHTML += `<td className="bg-gray-100 dark:bg-gray-700 font-bold p-2 border border-gray-300 dark:border-gray-600">O${i + 1}</td>`;
+            for (let j = 0; j < costoMatriz[i].length; j++) {
+                matrizHTML += `<td className="text-center p-2 border border-gray-300 dark:border-gray-600">${costoMatriz[i][j]}</td>`;
             }
-            matrixHTML += `<td className="bg-gray-100 dark:bg-gray-700 font-bold text-center p-2 border border-gray-300 dark:border-gray-600">${supply[i]}</td>`;
-            matrixHTML += '</tr>';
+            matrizHTML += `<td className="bg-gray-100 dark:bg-gray-700 font-bold text-center p-2 border border-gray-300 dark:border-gray-600">${oferta[i]}</td>`;
+            matrizHTML += '</tr>';
         }
-        matrixHTML += '<tr>';
-        matrixHTML += `<td className="p-2 border border-gray-300 dark:border-gray-600">Total Demanda</td>`;
-        for (let j = 0; j < demand.length; j++) {
-            matrixHTML += `<td className="text-center p-2 border border-gray-300 dark:border-gray-600">${demand[j]}</td>`;
+        matrizHTML += '<tr>';
+        matrizHTML += `<td className="p-2 border border-gray-300 dark:border-gray-600">Total Demanda</td>`;
+        for (let j = 0; j < demanda.length; j++) {
+            matrizHTML += `<td className="text-center p-2 border border-gray-300 dark:border-gray-600">${demanda[j]}</td>`;
         }
-        matrixHTML += '<td class="p-2 border border-gray-300 dark:border-gray-600">-</td>';
-        matrixHTML += '</tr>';
-        matrixHTML += '</table>';
-        return matrixHTML;
+        matrizHTML += '<td class="p-2 border border-gray-300 dark:border-gray-600">-</td>';
+        matrizHTML += '</tr>';
+        matrizHTML += '</table>';
+        return matrizHTML;
     }
-    function northWestCorner(costMatrix, supply, demand) {
-        const tablaInicial = `<p>Tabla Inicial</p>${printMatrix(costMatrix, supply, demand)}<br>`
+    function northWestCorner(costoMatriz, oferta, demanda) {
+        const tablaInicial = `<p>Tabla Inicial</p>${printMatriz(costoMatriz, oferta, demanda)}<br>`
         let totalCost = 0;
         let i = 0, j = 0;
         let steps = '';
-        while (i < supply.length && j < demand.length) {
-            const minVal = Math.min(supply[i], demand[j]);
-            totalCost += minVal * costMatrix[i][j];
-            supply[i] -= minVal;
-            demand[j] -= minVal;
-            steps += `Asigne ${minVal} unidades de O${i + 1} a D${j + 1} a un costo de ${costMatrix[i][j]}. La oferta restante en O${i + 1} es ${supply[i]} y la demanda restante en D${j + 1} es ${demand[j]}.<br>`;
-            steps += `Matriz en este paso:<br>${printMatrix(costMatrix, supply, demand)}<br>`;
-            if (supply[i] === 0) i++;
-            if (demand[j] === 0) j++;
+        while (i < oferta.length && j < demanda.length) {
+            const minVal = Math.min(oferta[i], demanda[j]);
+            totalCost += minVal * costoMatriz[i][j];
+            oferta[i] -= minVal;
+            demanda[j] -= minVal;
+            steps += `Asigne ${minVal} unidades de O${i + 1} a D${j + 1} a un costo de ${costoMatriz[i][j]}. La oferta restante en O${i + 1} es ${oferta[i]} y la demanda restante en D${j + 1} es ${demanda[j]}.<br>`;
+            steps += `Matriz en este paso:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
+            if (oferta[i] === 0) i++;
+            if (demanda[j] === 0) j++;
         }
         return `<p class="mt-4 text-lg">Costo total de transporte utilizando el método de la esquina noroeste:<strong class="font-bold"> ${totalCost}</strong></p><br><h2 className="block mr-4 w-20 text-gray-900 font-bold dark:text-gray-400">Pasos</h2>${tablaInicial}${steps}`;
     }
 
-    const leastCost = (costMatrix, supply, demand) => {
-        const tablaInicial = `<p>Tabla Inicial</p>${printMatrix(costMatrix, supply, demand)}<br>`
+    const leastCost = (costoMatriz, oferta, demanda) => {
+        const tablaInicial = `<p>Tabla Inicial</p>${printMatriz(costoMatriz, oferta, demanda)}<br>`
         let totalCost = 0;
-        const rows = supply.length;
-        const cols = demand.length;
+        const rows = oferta.length;
+        const cols = demanda.length;
         let steps = '';
         while (true) {
             let minVal = Infinity;
@@ -79,8 +78,8 @@ const useTransportMethods = () => {
 
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
-                    if (costMatrix[i][j] < minVal && supply[i] > 0 && demand[j] > 0) {
-                        minVal = costMatrix[i][j];
+                    if (costoMatriz[i][j] < minVal && oferta[i] > 0 && demanda[j] > 0) {
+                        minVal = costoMatriz[i][j];
                         minI = i;
                         minJ = j;
                     }
@@ -89,114 +88,114 @@ const useTransportMethods = () => {
 
             if (minVal === Infinity) break;
 
-            const quantity = Math.min(supply[minI], demand[minJ]);
-            totalCost += quantity * costMatrix[minI][minJ];
-            supply[minI] -= quantity;
-            demand[minJ] -= quantity;
-            steps += `Asigne ${quantity} unidades de O${minI + 1} a D${minJ + 1} a un costo de ${costMatrix[minI][minJ]}. La oferta restante en O${minI + 1} es ${supply[minI]} y la demanda restante en D${minJ + 1} es ${demand[minJ]}.<br>`;
-            steps += `Matriz en este paso:<br>${printMatrix(costMatrix, supply, demand)}<br>`;
+            const cantidad = Math.min(oferta[minI], demanda[minJ]);
+            totalCost += cantidad * costoMatriz[minI][minJ];
+            oferta[minI] -= cantidad;
+            demanda[minJ] -= cantidad;
+            steps += `Asigne ${cantidad} unidades de O${minI + 1} a D${minJ + 1} a un costo de ${costoMatriz[minI][minJ]}. La oferta restante en O${minI + 1} es ${oferta[minI]} y la demanda restante en D${minJ + 1} es ${demanda[minJ]}.<br>`;
+            steps += `Matriz en este paso:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
         }
 
         return `<p class="mt-4 text-lg">Costo total de transporte utilizando el método de Costo Mínimo:<strong class="font-bold"> ${totalCost}</strong></p><br><h2 className="block mr-4 w-20 text-gray-900 font-bold dark:text-gray-400">Pasos</h2>${tablaInicial}${steps}`;
     }
 
-    const vogel = () => {
-        const tablaInicial = `<p>Tabla Inicial</p>${printMatrix(costMatrix, supply, demand)}<br>`
+    const vogel = (costoMatriz, oferta, demanda) => {
+        const tablaInicial = `<p>Tabla Inicial</p>${printMatriz(costoMatriz, oferta, demanda)}<br>`
         let totalCost = 0;
-        let rows = supply.length;
-        let cols = demand.length;
+        let rows = oferta.length;
+        let cols = demanda.length;
         let steps = '';
 
         while (rows > 0 && cols > 0) {
-            const penalties = [];
+            const penalidad = [];
 
-            for (let i = 0; i < supply.length; i++) {
-                if (supply[i] > 0) {
+            for (let i = 0; i < oferta.length; i++) {
+                if (oferta[i] > 0) {
                     let min1 = Infinity, min2 = Infinity;
-                    for (let j = 0; j < demand.length; j++) {
-                        if (demand[j] > 0) {
-                            if (costMatrix[i][j] < min1) {
+                    for (let j = 0; j < demanda.length; j++) {
+                        if (demanda[j] > 0) {
+                            if (costoMatriz[i][j] < min1) {
                                 min2 = min1;
-                                min1 = costMatrix[i][j];
-                            } else if (costMatrix[i][j] < min2) {
-                                min2 = costMatrix[i][j];
+                                min1 = costoMatriz[i][j];
+                            } else if (costoMatriz[i][j] < min2) {
+                                min2 = costoMatriz[i][j];
                             }
                         }
                     }
-                    penalties.push({ index: i, type: 'row', penalty: min2 - min1 });
+                    penalidad.push({ index: i, type: 'row', penalty: min2 - min1 });
                 }
             }
 
-            for (let j = 0; j < demand.length; j++) {
-                if (demand[j] > 0) {
+            for (let j = 0; j < demanda.length; j++) {
+                if (demanda[j] > 0) {
                     let min1 = Infinity, min2 = Infinity;
-                    for (let i = 0; i < supply.length; i++) {
-                        if (supply[i] > 0) {
-                            if (costMatrix[i][j] < min1) {
+                    for (let i = 0; i < oferta.length; i++) {
+                        if (oferta[i] > 0) {
+                            if (costoMatriz[i][j] < min1) {
                                 min2 = min1;
-                                min1 = costMatrix[i][j];
-                            } else if (costMatrix[i][j] < min2) {
-                                min2 = costMatrix[i][j];
+                                min1 = costoMatriz[i][j];
+                            } else if (costoMatriz[i][j] < min2) {
+                                min2 = costoMatriz[i][j];
                             }
                         }
                     }
-                    penalties.push({ index: j, type: 'column', penalty: min2 - min1 });
+                    penalidad.push({ index: j, type: 'column', penalty: min2 - min1 });
                 }
             }
 
-            penalties.sort((a, b) => b.penalty - a.penalty);
-            const highestPenalty = penalties[0];
+            penalidad.sort((a, b) => b.penalty - a.penalty);
+            const penalidadAlta = penalidad[0];
 
-            if (highestPenalty.type === 'row') {
-                const i = highestPenalty.index;
+            if (penalidadAlta.type === 'row') {
+                const i = penalidadAlta.index;
                 let minCost = Infinity;
                 let minCol = -1;
 
-                for (let j = 0; j < demand.length; j++) {
-                    if (demand[j] > 0 && costMatrix[i][j] < minCost) {
-                        minCost = costMatrix[i][j];
+                for (let j = 0; j < demanda.length; j++) {
+                    if (demanda[j] > 0 && costoMatriz[i][j] < minCost) {
+                        minCost = costoMatriz[i][j];
                         minCol = j;
                     }
                 }
 
-                const allocation = Math.min(supply[i], demand[minCol]);
-                totalCost += allocation * minCost;
-                supply[i] -= allocation;
-                demand[minCol] -= allocation;
+                const asignacion = Math.min(oferta[i], demanda[minCol]);
+                totalCost += asignacion * minCost;
+                oferta[i] -= asignacion;
+                demanda[minCol] -= asignacion;
 
-                steps += `Asigne ${allocation} unidades de O${i + 1} a D${minCol + 1} a un costo de ${minCost}. La oferta restante en O${i + 1} es ${supply[i]} y la demanda restante en D${minCol + 1} es ${demand[minCol]}.<br>`;
-                steps += `Matriz en este paso:<br>${printMatrix(costMatrix, supply, demand)}<br>`;
+                steps += `Asigne ${asignacion} unidades de O${i + 1} a D${minCol + 1} a un costo de ${minCost}. La oferta restante en O${i + 1} es ${oferta[i]} y la demanda restante en D${minCol + 1} es ${demanda[minCol]}.<br>`;
+                steps += `Matriz en este paso:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
 
-                if (supply[i] === 0) {
+                if (oferta[i] === 0) {
                     rows--;
                 }
-                if (demand[minCol] === 0) {
+                if (demanda[minCol] === 0) {
                     cols--;
                 }
-            } else if (highestPenalty.type === 'column') {
-                const j = highestPenalty.index;
+            } else if (penalidadAlta.type === 'column') {
+                const j = penalidadAlta.index;
                 let minCost = Infinity;
                 let minRow = -1;
 
-                for (let i = 0; i < supply.length; i++) {
-                    if (supply[i] > 0 && costMatrix[i][j] < minCost) {
-                        minCost = costMatrix[i][j];
+                for (let i = 0; i < oferta.length; i++) {
+                    if (oferta[i] > 0 && costoMatriz[i][j] < minCost) {
+                        minCost = costoMatriz[i][j];
                         minRow = i;
                     }
                 }
 
-                const allocation = Math.min(supply[minRow], demand[j]);
-                totalCost += allocation * minCost;
-                supply[minRow] -= allocation;
-                demand[j] -= allocation;
+                const asignacion = Math.min(oferta[minRow], demanda[j]);
+                totalCost += asignacion * minCost;
+                oferta[minRow] -= asignacion;
+                demanda[j] -= asignacion;
 
-                steps += `Allocate ${allocation} units from S${minRow + 1} to D${j + 1} at a cost of ${minCost}. Remaining supply at S${minRow + 1} is ${supply[minRow]} and remaining demand at D${j + 1} is ${demand[j]}.<br><br>`;
-                steps += `Matrix at this step:<br>${printMatrix(costMatrix, supply, demand)}<br>`;
+                steps += `Allocate ${asignacion} units from S${minRow + 1} to D${j + 1} at a cost of ${minCost}. Remaining oferta at S${minRow + 1} is ${oferta[minRow]} and remaining demanda at D${j + 1} is ${demanda[j]}.<br><br>`;
+                steps += `Matrix at this step:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
 
-                if (supply[minRow] === 0) {
+                if (oferta[minRow] === 0) {
                     rows--;
                 }
-                if (demand[j] === 0) {
+                if (demanda[j] === 0) {
                     cols--;
                 }
             }
@@ -205,7 +204,7 @@ const useTransportMethods = () => {
         return `<p class="mt-4 text-lg">Costo total de transporte utilizando el método de aproximación de Vogel:<strong class="font-bold"> ${totalCost}</strong></p><br><h2 className="block mr-4 w-20 text-gray-900 font-bold dark:text-gray-400">Pasos</h2>${tablaInicial}${steps}`;
     }
     const solveProblem = (data, type) => {
-        const { costMatrix: costoMatriz, supply: oferta, demand: demanda } = data;
+        const { costoMatriz: costoMatriz, oferta: oferta, demanda: demanda } = data;
         balanceProblema(costoMatriz, oferta, demanda);
         switch (type) {
             case 1:
