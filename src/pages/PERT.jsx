@@ -33,7 +33,7 @@ export const PERT = () => {
     }
     const increment = () => {
         const numvar = setting?.num_actividades;
-        if (numvar < 8) {
+        if (numvar < 13) {
             setSetting({ ...setting, num_actividades: numvar + 1 });
         }
     }
