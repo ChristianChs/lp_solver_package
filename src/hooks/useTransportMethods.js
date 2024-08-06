@@ -192,8 +192,8 @@ const useTransportMethods = () => {
                 oferta[minRow] -= asignacion;
                 demanda[j] -= asignacion;
 
-                steps += `Allocate ${asignacion} units from S${minRow + 1} to D${j + 1} at a cost of ${minCost}. Remaining oferta at S${minRow + 1} is ${oferta[minRow]} and remaining demanda at D${j + 1} is ${demanda[j]}.<br><br>`;
-                steps += `Matrix at this step:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
+                steps += `Asigne ${asignacion} unidades de O${minRow + 1} a D${j + 1} a un costo de  ${minCost}. La oferta restante en O${minRow + 1} es ${oferta[minRow]} y la demanda restante en D${j + 1} es ${demanda[j]}.<br>`;
+                steps += `Matriz en este paso:<br>${printMatriz(costoMatriz, oferta, demanda)}<br>`;
 
                 if (oferta[minRow] === 0) {
                     rows--;
