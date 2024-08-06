@@ -33,7 +33,7 @@ export const CPM = () => {
     }
     const increment = () => {
         const numvar = setting?.num_actividades;
-        if (numvar < 8) {
+        if (numvar < 13) {
             setSetting({ ...setting, num_actividades: numvar + 1 });
         }
     }
@@ -242,7 +242,7 @@ export const CPM = () => {
                                                 <h3 className="text-lg font-semibold mb-2 pt-6 text-gray-600 dark:text-gray-300">Red de Actividades</h3>
                                                 <Graphviz
                                                     dot={resultDot}
-                                                    options={{ zoom: true }}
+                                                    options={{ zoom: true ,fit:true,width:800}}
                                                 />
                                             </>
                                         )
