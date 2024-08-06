@@ -107,7 +107,9 @@ export const TransportVogel = () => {
             destinations: destinos,
             routes: rutas,
         };
-        solveProblem(convertToMatrices(transportationData),3);
+        const data = convertToMatrices(transportationData)
+        console.log("dataform",data)
+        solveProblem(data,3);
     }
 
     

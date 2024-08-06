@@ -2,7 +2,10 @@ import parse from 'html-react-parser'
 import { useState } from 'react';
 const useTransportMethods = () => {
     const [resultados, setResultados] = useState('');
+
     const balanceProblema = (costoMatriz, oferta, demanda) => {
+        console.log("oferta",oferta)
+        console.log("demanda",demanda)
         const totalOferta = oferta.reduce((acc, val) => acc + val, 0);
         const totalDemanda = demanda.reduce((acc, val) => acc + val, 0);
 
@@ -204,7 +207,7 @@ const useTransportMethods = () => {
         return `<p class="mt-4 text-lg">Costo total de transporte utilizando el método de aproximación de Vogel:<strong class="font-bold"> ${totalCost}</strong></p><br><h2 className="block mr-4 w-20 text-gray-900 font-bold dark:text-gray-400">Pasos</h2>${tablaInicial}${steps}`;
     }
     const solveProblem = (data, type) => {
-        const { costoMatriz: costoMatriz, oferta: oferta, demanda: demanda } = data;
+        const { costMatrix: costoMatriz, supply: oferta, demand: demanda } = data;
         balanceProblema(costoMatriz, oferta, demanda);
         switch (type) {
             case 1:
